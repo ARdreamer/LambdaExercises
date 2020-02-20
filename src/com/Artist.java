@@ -17,4 +17,8 @@ public class Artist {
     private String origin;
 
     private Track track;
+
+    public boolean isFrom(String city){
+        return false;
+    }
 }
