@@ -2,10 +2,9 @@ package com;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -93,7 +92,66 @@ public class LambdaTest {
                 filter(s -> isDigit(s.charAt(0))).
                 collect(Collectors.toList());
         System.out.println(beginningWithNumber);
+        //3.3.4 flatMap
+        List<Integer> integerList = Stream.of(Arrays.asList(1, 2), Arrays.asList(3, 4))
+                .flatMap(numbers -> numbers.stream())
+                .collect(Collectors.toList());
+        //3.3.5 max和min
+        List<Track> tracks = Arrays.asList(new Track("Bakai", 524),
+                new Track("Violets for Your Furs", 378),
+                new Track("Time Wars", 451));
+        Track track1 = tracks.stream()
+                .min(Comparator.comparing(Track::getLength))
+                .get();
+        System.out.println(track1);
+        //3.3.7 reduce
+        Integer reduce = Stream.of(1, 2, 3)
+                .reduce(10, Integer::sum);
+        System.out.println(reduce);
+        BinaryOperator<Integer> binaryOperator = (acc, element) -> acc + element;
+        Integer apply = binaryOperator.apply(
+                binaryOperator.apply(
+                        binaryOperator.apply(0, 1),
+                        2),
+                3);
+        System.out.println(apply);
+        //3.3.8
+
     }
+
+    @Test
+    public void test34() {
+        //3-19 找出所有专辑中曲目大于60s的歌曲
+        List<Album> albumList = new ArrayList<>();
+        Set<String> trackNames = new HashSet<>();
+        for (Album album : albumList) {
+            for (Track track : album.getTracks()) {
+                if (track.getLength() > 60) {
+                    trackNames.add(track.getName());
+                }
+            }
+        }
+        albumList.stream()
+                .forEach(album -> {
+                    album.getTracks()
+                            .forEach(track -> {
+                                if (track.getLength() > 60) {
+                                    trackNames.add(track.getName());
+                                }
+                            });
+                });
+
+        albumList.stream()
+                .forEach(album -> {
+                    album.getTracks()
+                            .stream()
+                            .filter(track -> track.getLength() > 60)
+                            .map(track -> track.getName())
+                            .forEach(name -> trackNames.add(name));
+                });
+
+    }
+
 
     public boolean isDigit(char c) {
         char[] chars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};

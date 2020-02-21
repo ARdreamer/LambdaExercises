@@ -1,5 +1,6 @@
 package com;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -8,8 +9,11 @@ import lombok.Data;
  * @Desc: Track
  */
 @Data
+@AllArgsConstructor
 public class Track {
 
     private String name;
+
+    private Integer length;
 
 }
