@@ -149,7 +149,6 @@ public class LambdaTest {
                             .map(track -> track.getName())
                             .forEach(name -> trackNames.add(name));
                 });
-
     }
 
 
