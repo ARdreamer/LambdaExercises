@@ -8,6 +8,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * @Author: baojx
  * @Date: 2020/2/20 20:34
@@ -62,7 +64,7 @@ public class LambdaTest {
     public void test33() {
         //3.3.1 collect
         List<String> collected1 = Stream.of("a", "b", "c").
-                collect(Collectors.toList());
+                collect(toList());
         System.out.println(collected1);
         //3.3.2 map
         List<String> collected2 = new ArrayList<>();
@@ -74,11 +76,11 @@ public class LambdaTest {
         //3.3.2 map to Up
         List<String> collected3 = Stream.of("a", "b", "c").
                 map(s -> s.toUpperCase()).
-                collect(Collectors.toList());
+                collect(toList());
         System.out.println(collected3);
         List<String> collected4 = Stream.of("a", "b", "c").
                 map(String::toUpperCase).
-                collect(Collectors.toList());
+                collect(toList());
         System.out.println(collected4);
         //3.3.3 filter
         List<String> beginningWithNumbers = new ArrayList<>();
@@ -90,12 +92,12 @@ public class LambdaTest {
         System.out.println(beginningWithNumbers);
         List<String> beginningWithNumber = Stream.of("a", "1abc", "abc1").
                 filter(s -> isDigit(s.charAt(0))).
-                collect(Collectors.toList());
+                collect(toList());
         System.out.println(beginningWithNumber);
         //3.3.4 flatMap
         List<Integer> integerList = Stream.of(Arrays.asList(1, 2), Arrays.asList(3, 4))
                 .flatMap(numbers -> numbers.stream())
-                .collect(Collectors.toList());
+                .collect(toList());
         //3.3.5 max和min
         List<Track> tracks = Arrays.asList(new Track("Bakai", 524),
                 new Track("Violets for Your Furs", 378),
@@ -150,6 +152,35 @@ public class LambdaTest {
                             .forEach(name -> trackNames.add(name));
                 });
     }
+
+    int addUp(Stream<Integer> numbers) {
+        return numbers.reduce(0, (acc, number) -> acc + number);
+    }
+
+    List<String> artist(List<Artist> artistList) {
+        return artistList.stream()
+                .flatMap(artist -> Stream.of(artist.getMembers(), artist.getName()))
+                .collect(toList());
+    }
+
+    public static List<Album> getAlbumsWithAtMostThreeTracks(List<Album> input) {
+        return input.stream()
+                .filter(album -> album.getTracks().size() <= 3)
+                .collect(toList());
+    }
+
+//    int artistCount(List<Artist> artistList) {
+//        return artistList.stream()
+//                .map(artist -> artist.getMembers().count())
+//                .reduce(0L, Long::sum)
+//                .intValue();
+//    }
+
+    int countSum(String strs) {
+        return (int) strs.chars()
+                .filter(Character::isLowerCase).count();
+    }
+
 
 
     public boolean isDigit(char c) {
